@@ -15,15 +15,15 @@ module.exports.registerUser = async (req, res, next) => {
     }
     // After all checks user will created at this point 
     // First we deStucture the data
-    const { firstname, lastname, email, password } = req.body;
+    const { fullname, lastname, email, password } = req.body;
 
     // Now here we need hashedPassword from userModel
     const hashedPassword = await userModel.hashPassword(password);
 
     // Here create new user with userService here use the hashpassword, and this is the final user creation.
     const user = await userService.createUser({
-        firstname,
-        lastname,
+        firstname: fullname.firstname,
+        lastname: fullname.lastname,
         email,
         password: hashedPassword
     })
