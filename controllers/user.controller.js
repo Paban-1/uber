@@ -65,5 +65,13 @@ module.exports.loginUser = async (req, res, next) => {
     // Now here set the token to the user using the generateAuthToken method that are creted at userModel
     const token = user.generateAuthToken()
     // After all of this just send the response with the token and user
+
+    // send cookies 
+    res.cookie('token', token)
     res.status(200).json({ token, user })
+}
+
+// Controller for Get user Profile
+module.exports.getUserProfile = async (req, res, next) => {
+    res.status(200).json(req.user)
 }

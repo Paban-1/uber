@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 const { body } = require('express-validator')
 const userController = require('../controllers/user.controller')
+// require auth middleware for protect the routes
+const authMiddleware = require('../middleware/auth.middleware')
 
 // Create Route for Register user WIth all Validation
 router.post('/register', [
@@ -23,5 +25,9 @@ router.post('/login', [
     // Call the controller for Login
     userController.loginUser
 )
+
+// Create Route for Get user Profile
+router.get('/profile', authMiddleware.authUser, userController.getUserProfile)
+
 
 module.exports = router
