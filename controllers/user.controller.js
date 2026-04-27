@@ -34,3 +34,36 @@ module.exports.registerUser = async (req, res, next) => {
     // After all of this just send the response with the token and user
     res.status(201).json({ token, user })
 }
+
+// Controller for Login User
+module.exports.loginUser = async (req, res, next) => {
+    // checking for errors thoses send by express-validator
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    // After all checks user will login at this point
+    // First we deStucture the data
+    const { email, password } = req.body;
+    // At userModel  the password is select false so we need to + for to tell the mongoose to select the password for login
+    const user = await userModel.findOne({ email }).select('+password')
+
+    // if the user is not exist then send 401 status with a message,
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid email or password' })
+    }
+
+    // use The comparePassword method that we created at userModel, to use to compare password with userGiven password and the system password.
+    const isMatch = await user.comparePassword(password)
+
+    // check if the password is not match the send status code 401 (unauthorized) with a message.
+    if (!isMatch) {
+        return res.status(401).json({ message: 'Invalid email or password' })
+    }
+
+    // Now here set the token to the user using the generateAuthToken method that are creted at userModel
+    const token = user.generateAuthToken()
+    // After all of this just send the response with the token and user
+    res.status(200).json({ token, user })
+}

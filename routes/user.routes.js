@@ -14,4 +14,14 @@ router.post('/register', [
     userController.registerUser
 )
 
+// Create Route for Login user WIth all Validation
+router.post('/login', [
+    // for login we expect email and password so we need to validate them
+    body('email').isEmail().withMessage('Invalid email'),
+    body('password').isLength({ main: 6 }).withMessage('Password is  incorrect')
+],
+    // Call the controller for Login
+    userController.loginUser
+)
+
 module.exports = router
