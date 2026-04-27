@@ -62,3 +62,55 @@ The request body must be sent as JSON and include the following fields:
   ]
 }
 ```
+
+## `POST /users/login`
+
+Authenticates an existing user and returns a JWT token.
+
+### Description
+This endpoint accepts user login credentials (email and password) and authenticates the user. It performs validation for email format and password length before checking credentials against the database.
+
+### Request URL
+`POST /users/login`
+
+### Request Body
+The request body must be sent as JSON and include the following fields:
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Required Fields
+- `email` (string): required, must be a valid email address
+- `password` (string): required, minimum 6 characters
+
+### Response
+- `200 OK` - User successfully authenticated.
+- `400 Bad Request` - Validation failed or required fields are missing.
+- `401 Unauthorized` - Invalid email or password.
+- `500 Internal Server Error` - Server error during authentication.
+
+### Successful Response Example
+```json
+{
+  "token": "<jwt-token>",
+  "user": {
+    "_id": "<user-id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+```
+
+### Error Response Example
+```json
+{
+  "message": "Invalid email or password"
+}
+```
