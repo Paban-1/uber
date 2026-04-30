@@ -29,5 +29,7 @@ router.post('/login', [
 // Create Route for Get user Profile
 router.get('/profile', authMiddleware.authUser, userController.getUserProfile)
 
+// Create Route for Logout user
+router.post('/logout', authMiddleware.authUser, userController.logoutUser)
 
 module.exports = router
