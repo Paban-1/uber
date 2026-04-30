@@ -114,3 +114,58 @@ The request body must be sent as JSON and include the following fields:
   "message": "Invalid email or password"
 }
 ```
+
+## `GET /users/profile`
+
+Returns the currently authenticated user's profile.
+
+### Description
+This endpoint requires a valid authentication token and returns the authenticated user's stored profile information.
+
+### Request URL
+`GET /users/profile`
+
+### Authentication
+- Requires a valid JWT token via `Authorization: Bearer <token>` header or cookie.
+
+### Response
+- `200 OK` - Profile returned successfully.
+- `401 Unauthorized` - Missing or invalid authentication token.
+- `500 Internal Server Error` - Server error while fetching profile.
+
+### Successful Response Example
+```json
+{
+  "_id": "<user-id>",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+## `POST /users/logout`
+
+Logs out the authenticated user and invalidates their token.
+
+### Description
+This endpoint clears the authentication cookie and blacklists the provided token so it can no longer be used.
+
+### Request URL
+`POST /users/logout`
+
+### Authentication
+- Requires a valid JWT token via `Authorization: Bearer <token>` header or cookie.
+
+### Response
+- `200 OK` - User logged out successfully.
+- `401 Unauthorized` - Missing or invalid authentication token.
+- `500 Internal Server Error` - Server error while logging out.
+
+### Successful Response Example
+```json
+{
+  "message": "User logged out successfully"
+}
+```

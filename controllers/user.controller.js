@@ -1,6 +1,8 @@
 // require HashPassword
 const userModel = require('../models/user.model')
 const userService = require('../services/user.service')
+// require BlacklistToken model for blacklisting the token when user logout
+const blacklistTokenModel = require('../models/blacklistToken.model')
 
 // require Validator Result that coming from user.routes if any issue happend while creating user this will give the errors
 const { validationResult } = require('express-validator')
@@ -69,6 +71,20 @@ module.exports.loginUser = async (req, res, next) => {
     // send cookies 
     res.cookie('token', token)
     res.status(200).json({ token, user })
+}
+
+// Controller for Logout User
+module.exports.logoutUser = async (req, res, next) => {
+    // to logout user we need to clear cookies
+    res.clearCookie('token')
+    // get the token for blacklisting
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
+
+    // blacklist the token come from cookies or headers
+    await blacklistTokenModel.create({ token })
+
+    // Send response with a message
+    res.status(200).json({ message: 'User logged out successfully' })
 }
 
 // Controller for Get user Profile
