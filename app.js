@@ -19,7 +19,7 @@ app.use(cookieParser())
 app.use('/users', userRoutes)
 
 app.get('/', (req, res) => {
-    res.send('yoo')
+    res.send('uber')
 })
 
 module.exports = app
